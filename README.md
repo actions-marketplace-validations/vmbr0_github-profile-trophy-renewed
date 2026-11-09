@@ -699,7 +699,7 @@ Until this branch is merged, the file that is already generated is served from
 its commit:
 
 ```md
-[![trophy](https://cdn.jsdelivr.net/gh/vmbr0/github-profile-trophy@1b665275773dab4f87a8e0e3ab3ea10e25ba1363/trophy.svg)](https://github.com/vmbr0/github-profile-trophy)
+[![trophy](https://cdn.jsdelivr.net/gh/vmbr0/github-profile-trophy@8b4e10d82359a9c76795675625023d7cf6de667d/trophy.svg)](https://github.com/vmbr0/github-profile-trophy)
 ```
 
 ## Self-hosting on Vercel
