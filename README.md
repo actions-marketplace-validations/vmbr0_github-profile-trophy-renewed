@@ -1,6 +1,6 @@
 <div align="center">
-  <img width="140" src="https://user-images.githubusercontent.com/6661165/91657958-61b4fd00-eb00-11ea-9def-dc7ef5367e34.png" alt="GitHub Profile Trophy"/>
-  <h2 align="center">GitHub Profile Trophy</h2>
+  <img width="140" src="https://user-images.githubusercontent.com/6661165/91657958-61b4fd00-eb00-11ea-9def-dc7ef5367e34.png" alt="GitHub Profile Trophy Renewed"/>
+  <h2 align="center">GitHub Profile Trophy Renewed</h2>
   <p align="center">Rank trophies for a GitHub profile README</p>
   <p align="center">
     Patched fork by <a href="https://github.com/vmbr0">VMBR0</a>
@@ -23,7 +23,7 @@
 
 # About
 
-This repository is a patched fork of
+**GitHub Profile Trophy Renewed** is a patched fork of
 [ryo-ma/github-profile-trophy](https://github.com/ryo-ma/github-profile-trophy).
 It renders a row of GitHub trophies (stars, commits, followers, and the other
 ranks below) as an SVG you can put on a profile README.

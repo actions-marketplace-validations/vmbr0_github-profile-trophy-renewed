@@ -1,4 +1,4 @@
-name: Generate GitHub Profile Trophy SVG
+name: Generate GitHub Profile Trophy Renewed SVG
 description: Run the local generator script to produce an SVG.
 inputs:
   username:

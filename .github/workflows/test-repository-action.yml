@@ -1,4 +1,4 @@
-name: Test GitHub Profile Trophy Action
+name: Test GitHub Profile Trophy Renewed Action
 on: [push, pull_request, workflow_dispatch]
 
 jobs:

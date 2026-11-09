@@ -11,7 +11,7 @@ abstract class BaseError {
     <html lang="en"><head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>GitHub Profile Trophy</title>
+      <title>GitHub Profile Trophy Renewed</title>
       <meta name="description" content="🏆 Add dynamically generated GitHub Stat Trophies on your readme">
       <style>
         body {
