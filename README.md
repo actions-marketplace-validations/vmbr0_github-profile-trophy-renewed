@@ -55,6 +55,9 @@ no-server way to publish the SVG.
   to treat the filename as a folder and then fail the write.
 - **No server required.** `trophy.svg` in this repo, refreshed by the **Update
   trophy image** workflow, can be embedded through jsDelivr.
+- **Card design.** Each trophy has a rank-colored frame (gold, silver, bronze,
+  or the theme's secret color) and a progress bar that keeps its width when
+  GitHub strips the CSS animation.
 
 ## Setup
 
