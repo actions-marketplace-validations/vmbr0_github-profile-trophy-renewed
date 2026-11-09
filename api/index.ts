@@ -2,12 +2,15 @@ import { Card } from "../src/card.ts";
 import { CONSTANTS, parseParams } from "../src/utils.ts";
 import { COLORS, Theme } from "../src/theme.ts";
 import { Error400 } from "../src/error_page.ts";
-import "@std/dotenv/load";
+// Full URL: vercel-deno does not ship deno.json, so the "@std/dotenv/load"
+// alias throws ERR_MODULE_NOT_FOUND and every request 500s. GitHub then
+// shows a broken image instead of the trophy card.
+import "https://deno.land/std@0.224.0/dotenv/load.ts";
 import { staticRenderRegeneration } from "../src/StaticRenderRegeneration/index.ts";
 import { GithubRepositoryService } from "../src/Repository/GithubRepository.ts";
 import { GithubApiService } from "../src/Services/GithubApiService.ts";
 import { ServiceError } from "../src/Types/index.ts";
-import { ErrorPage } from "../src/pages/Error.ts";
+import { errorSvg, renderErrorImage } from "../src/pages/ErrorImage.ts";
 import { cacheProvider } from "../src/config/cache.ts";
 
 const serviceProvider = new GithubApiService();
@@ -36,7 +39,29 @@ export default (request: Request) =>
     return app(req);
   });
 
+// GitHub's image proxy only displays image responses. An HTML error page
+// (or a 500) is what shows up as a broken image on a profile README.
+function errorImageResponse(body: string): Response {
+  return new Response(body, {
+    status: 200,
+    headers: new Headers({
+      "Content-Type": "image/svg+xml",
+      "Cache-Control": "no-store, max-age=0",
+      "x-trophy-no-cache": "1",
+    }),
+  });
+}
+
 async function app(req: Request): Promise<Response> {
+  try {
+    return await renderTrophy(req);
+  } catch (error) {
+    console.error(error);
+    return errorImageResponse(errorSvg("Could not render trophies."));
+  }
+}
+
+async function renderTrophy(req: Request): Promise<Response> {
   const params = parseParams(req);
   const username = params.get("username");
   const row = params.getNumberValue("row", CONSTANTS.DEFAULT_MAX_ROW);
@@ -133,16 +158,7 @@ async function app(req: Request): Promise<Response> {
   if (!hasCache) {
     const userResponseInfo = await client.requestUserInfo(username);
     if (userResponseInfo instanceof ServiceError) {
-      return new Response(
-        ErrorPage({ error: userResponseInfo }).render(),
-        {
-          status: userResponseInfo.code,
-          headers: new Headers({
-            "Content-Type": "text/html",
-            "Cache-Control": cacheControlHeader,
-          }),
-        },
-      );
+      return errorImageResponse(renderErrorImage(userResponseInfo));
     }
     userInfo = userResponseInfo;
     await cacheProvider.set(userKeyCache, JSON.stringify(userInfo));

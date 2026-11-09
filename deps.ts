@@ -3,6 +3,7 @@ import { defaults } from "https://deno.land/x/soxa@1.4/src/defaults.ts";
 import {
   assertEquals,
   assertRejects,
+  assertStringIncludes,
 } from "https://deno.land/std@0.203.0/assert/mod.ts";
 import {
   assertSpyCalls,
@@ -30,6 +31,7 @@ export {
   assertEquals,
   assertRejects,
   assertSpyCalls,
+  assertStringIncludes,
   returnsNext,
   soxa,
   spy,

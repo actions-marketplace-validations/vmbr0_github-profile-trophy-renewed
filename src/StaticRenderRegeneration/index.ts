@@ -28,7 +28,13 @@ export async function staticRenderRegeneration(
 
   const response = await render(request);
 
-  if (response.status >= 200 && response.status < 300) {
+  // Error cards are HTTP 200 so GitHub's image proxy will render them, but
+  // they must not be stored: a missing token or a rate limit would otherwise
+  // stick for the whole revalidate window.
+  const skipCache = response.headers.get("x-trophy-no-cache") === "1";
+  if (skipCache) {
+    response.headers.delete("x-trophy-no-cache");
+  } else if (response.status >= 200 && response.status < 300) {
     void cacheManager.save(response);
   }
 
