@@ -620,6 +620,21 @@ Usage:
     token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+## Free image, no server
+
+`trophy.svg` at the root of this repo is already rendered for the repository
+owner. GitHub's image proxy will not display an SVG from
+`raw.githubusercontent.com`, so the profile README has to load it through
+jsDelivr:
+
+```md
+[![trophy](https://cdn.jsdelivr.net/gh/vmbr0/github-profile-trophy@master/trophy.svg)](https://github.com/vmbr0/github-profile-trophy)
+```
+
+The workflow **Update trophy image** rewrites that file every day. On a fork,
+open the Actions tab once and enable workflows, otherwise the schedule stays
+off. You can also run it by hand with "Run workflow".
+
 ## Self-hosting on Vercel
 
 By self-hosting you avoid rate-limits, instances getting paused and you bypass
