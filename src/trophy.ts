@@ -1,4 +1,4 @@
-import { getNextRankBar, getTrophyIcon } from "./icons.ts";
+import { getNextRankBar, getTrophyIcon, rankAccent } from "./icons.ts";
 import { abridgeScore, CONSTANTS, RANK, RANK_ORDER } from "./utils.ts";
 import { Theme } from "./theme.ts";
 
@@ -68,11 +68,15 @@ export class Trophy {
   ): string {
     const { BACKGROUND: PRIMARY, TITLE: SECONDARY, TEXT, NEXT_RANK_BAR } =
       theme;
+    const accent = rankAccent(theme, this.rank);
     const nextRankBar = getNextRankBar(
       this.title,
       this.calculateNextRankPercentage(),
       NEXT_RANK_BAR,
+      panelSize,
     );
+    const font =
+      "Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji";
     return `
         <svg
           x="${x}"
@@ -84,20 +88,20 @@ export class Trophy {
           xmlns="http://www.w3.org/2000/svg"
         >
           <rect
-            x="0.5"
-            y="0.5"
-            rx="4.5"
-            width="${panelSize - 1}"
-            height="${panelSize - 1}"
-            stroke="#e1e4e8"
+            x="1.25"
+            y="1.25"
+            rx="14"
+            width="${panelSize - 2.5}"
+            height="${panelSize - 2.5}"
+            stroke="${noFrame ? "none" : accent}"
+            stroke-width="${noFrame ? 0 : 1.5}"
             fill="${PRIMARY}"
-            stroke-opacity="${noFrame ? "0" : "1"}"
             fill-opacity="${noBackground ? "0" : "1"}"
           />
-          ${getTrophyIcon(theme, this.rank)}
-          <text x="50%" y="18" text-anchor="middle" font-family="Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji" font-weight="bold" font-size="13" fill="${SECONDARY}">${this.title}</text>
-          <text x="50%" y="85" text-anchor="middle" font-family="Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji" font-weight="bold" font-size="10.5" fill="${TEXT}">${this.topMessage}</text>
-          <text x="50%" y="97" text-anchor="middle" font-family="Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji" font-weight="bold" font-size="10" fill="${TEXT}">${this.bottomMessage}</text>
+          ${getTrophyIcon(theme, this.rank, this.title)}
+          <text x="50%" y="18" text-anchor="middle" font-family="${font}" font-weight="700" font-size="12" letter-spacing="0.2" fill="${SECONDARY}">${this.title}</text>
+          <text x="50%" y="84" text-anchor="middle" font-family="${font}" font-weight="600" font-size="10" fill="${TEXT}">${this.topMessage}</text>
+          <text x="50%" y="96" text-anchor="middle" font-family="${font}" font-weight="700" font-size="11" fill="${TEXT}">${this.bottomMessage}</text>
           ${nextRankBar}
         </svg>
         `;

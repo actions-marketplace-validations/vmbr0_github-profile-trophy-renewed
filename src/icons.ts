@@ -26,12 +26,26 @@ Created by potrace 1.15, written by Peter Selinger 2001-2017
 </svg>`;
 };
 
+export function rankAccent(theme: Theme, rank: RANK): string {
+  if (rank === RANK.SECRET) return theme.SECRET_RANK_2;
+  if (rank.startsWith(RANK.S)) return theme.S_RANK_BASE;
+  if (rank.startsWith(RANK.A)) return theme.A_RANK_BASE;
+  if (rank === RANK.B) return theme.B_RANK_BASE;
+  return theme.DEFAULT_RANK_BASE;
+}
+
 export const getNextRankBar = (
   title: string,
   percentage: number,
   color: string,
+  panelSize = 110,
 ): string => {
-  const maxWidth = 80;
+  const inset = 14;
+  const maxWidth = Math.max(panelSize - inset * 2, 0);
+  const clamped = Math.max(0, Math.min(1, percentage));
+  const filled = Math.round(maxWidth * clamped * 10) / 10;
+  const y = panelSize - 9;
+  const height = 5;
   return `
     <style>
     @keyframes ${title}RankAnimation {
@@ -39,7 +53,7 @@ export const getNextRankBar = (
         width: 0px;
       }
       to {
-        width: ${maxWidth * percentage}px;
+        width: ${filled}px;
       }
     }
     #${title}-rank-progress{
@@ -47,20 +61,21 @@ export const getNextRankBar = (
     }
     </style>
     <rect
-      x="15"
-      y="101"
-      rx="1"
+      x="${inset}"
+      y="${y}"
+      rx="2.5"
       width="${maxWidth}"
-      height="3.2"
-      opacity="0.3"
+      height="${height}"
+      opacity="0.18"
       fill="${color}"
     />
     <rect
       id="${title}-rank-progress"
-      x="15"
-      y="101"
-      rx="1"
-      height="3.2"
+      x="${inset}"
+      y="${y}"
+      rx="2.5"
+      width="${filled}"
+      height="${height}"
       fill="${color}"
     />
   `;
@@ -88,7 +103,11 @@ const getSmallTrophyIcon = (
   // Single Rank
   return "";
 };
-export const getTrophyIcon = (theme: Theme, rank = RANK.UNKNOWN) => {
+export const getTrophyIcon = (
+  theme: Theme,
+  rank = RANK.UNKNOWN,
+  title = "trophy",
+) => {
   let color = theme.DEFAULT_RANK_BASE;
   let rankColor = theme.DEFAULT_RANK_TEXT;
   let backgroundIcon = "";
@@ -143,15 +162,18 @@ export const getTrophyIcon = (theme: Theme, rank = RANK.UNKNOWN) => {
   }</text>
   `;
   const optionRankIcon = getSmallTrophyIcon(icon, color, rank.length - 1);
+  // One gradient per trophy. A shared id (the rank alone) makes later cards
+  // steal the paint of earlier cards of the same rank.
+  const gradientId = `rank-${title}-${rank}`;
   return `
   ${backgroundIcon}
   ${optionRankIcon}
   <defs>
-    <linearGradient id="${rank}" gradientTransform="rotate(45)">
+    <linearGradient id="${gradientId}" gradientTransform="rotate(45)">
     ${gradationColor}
     </linearGradient>
   </defs>
-  <svg x="28" y="20" width="100" height="100" viewBox="0 0 30 30" fill="url(#${rank})" xmlns="http://www.w3.org/2000/svg">
+  <svg x="28" y="20" width="100" height="100" viewBox="0 0 30 30" fill="url(#${gradientId})" xmlns="http://www.w3.org/2000/svg">
     ${icon}
   </svg>
   `;

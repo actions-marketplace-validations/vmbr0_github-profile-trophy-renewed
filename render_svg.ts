@@ -11,6 +11,7 @@ if (!username) {
   Deno.exit(1);
 }
 
+import { outputDirectory } from "./src/Helpers/outputPath.ts";
 import { GithubApiService } from "./src/Services/GithubApiService.ts";
 import { Card } from "./src/card.ts";
 import { COLORS } from "./src/theme.ts";
@@ -58,12 +59,14 @@ async function main() {
   const theme = (COLORS as any)[themeName] ?? (COLORS as any).default;
   const svg = card.render(userInfo, theme);
 
-  try {
-    const dir = outputPath.replace(/\/[^/]+$/, "");
-    if (dir) await Deno.mkdir(dir, { recursive: true });
-  } catch {
-    console.error("Failed to create directory. No permission?");
-    Deno.exit(3);
+  const dir = outputDirectory(outputPath);
+  if (dir) {
+    try {
+      await Deno.mkdir(dir, { recursive: true });
+    } catch {
+      console.error("Failed to create directory. No permission?");
+      Deno.exit(3);
+    }
   }
 
   await Deno.writeTextFile(outputPath, svg);
