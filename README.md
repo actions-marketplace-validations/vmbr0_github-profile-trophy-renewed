@@ -18,7 +18,7 @@
 </div>
 
 <p align="center">
-  <img src="https://cdn.jsdelivr.net/gh/vmbr0/github-profile-trophy@8b4e10d82359a9c76795675625023d7cf6de667d/trophy.svg" alt="Trophies for vmbr0"/>
+  <img src="https://cdn.jsdelivr.net/gh/vmbr0/github-profile-trophy@v1.0.0/trophy.svg" alt="Trophies for vmbr0"/>
 </p>
 
 # About
@@ -65,10 +65,11 @@ Paste this into a profile README. It loads the card already generated for
 `vmbr0`.
 
 ```md
-[![trophy](https://cdn.jsdelivr.net/gh/vmbr0/github-profile-trophy@8b4e10d82359a9c76795675625023d7cf6de667d/trophy.svg)](https://github.com/vmbr0/github-profile-trophy)
+[![trophy](https://cdn.jsdelivr.net/gh/vmbr0/github-profile-trophy@v1.0.0/trophy.svg)](https://github.com/vmbr0/github-profile-trophy)
 ```
 
-After this branch is on `master`, you can drop the commit hash:
+`v1.0.0` stays on this release. Use `@master` instead if you want the copy that
+the daily workflow rewrites:
 
 ```md
 [![trophy](https://cdn.jsdelivr.net/gh/vmbr0/github-profile-trophy@master/trophy.svg)](https://github.com/vmbr0/github-profile-trophy)
@@ -99,7 +100,7 @@ needed when private contributions should count.
 
 ```yaml
 - name: Generate trophy
-  uses: vmbr0/github-profile-trophy@master
+  uses: vmbr0/github-profile-trophy@v1.0.0
   with:
     username: your-username
     output_path: trophy.svg
