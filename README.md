@@ -1,27 +1,82 @@
 <div align="center">
   <img width="140" src="https://user-images.githubusercontent.com/6661165/91657958-61b4fd00-eb00-11ea-9def-dc7ef5367e34.png"  alt="GitHub Profile Trophy"/>
   <h2 align="center">GitHub Profile Trophy</h2>
-  <p align="center">🏆 Add dynamically generated GitHub Stat Trophies on your README</p>
+  <p align="center">🏆 Rank trophies for a GitHub profile README</p>
+  <p align="center">
+    Patched fork by <a href="https://github.com/vmbr0">VMBR0</a>
+    · Original project by <a href="https://github.com/ryo-ma">ryo-ma</a>
+  </p>
 </div>
 <div align="center">
 
-[![stargazers](https://img.shields.io/github/stars/ryo-ma/github-profile-trophy)](https://github.com/ryo-ma/github-profile-trophy/stargazers)
-[![forks](https://img.shields.io/github/forks/ryo-ma/github-profile-trophy)](https://github.com/ryo-ma/github-profile-trophy/network/members)
-[![issues](https://img.shields.io/github/issues/ryo-ma/github-profile-trophy)](https://github.com/ryo-ma/github-profile-trophy/issues)
-[![license](https://img.shields.io/github/license/ryo-ma/github-profile-trophy)](https://github.com/ryo-ma/github-profile-trophy/blob/master/LICENSE)
-[![share](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fryo-ma%2Fgithub-profile-trophy)](https://twitter.com/intent/tweet?text=Add%20dynamically%20generated%20GitHub%20Trophy%20on%20your%20readme%0D%0A&url=https%3A%2F%2Fgithub.com%2Fryo-ma%2Fgithub-profile-trophy)
+[![stargazers](https://img.shields.io/github/stars/vmbr0/github-profile-trophy)](https://github.com/vmbr0/github-profile-trophy/stargazers)
+[![forks](https://img.shields.io/github/forks/vmbr0/github-profile-trophy)](https://github.com/vmbr0/github-profile-trophy/network/members)
+[![issues](https://img.shields.io/github/issues/vmbr0/github-profile-trophy)](https://github.com/vmbr0/github-profile-trophy/issues)
+[![license](https://img.shields.io/github/license/vmbr0/github-profile-trophy)](https://github.com/vmbr0/github-profile-trophy/blob/master/LICENSE)
 
 </div>
+
+# About this repository
+
+This is a **patched fork** of
+[ryo-ma/github-profile-trophy](https://github.com/ryo-ma/github-profile-trophy).
+
+The project builds an SVG card of GitHub trophies (stars, commits, followers,
+and the other ranks below) that you embed in a profile README. The upstream
+service at `github-profile-trophy.vercel.app` is often down or rate-limited. A
+fresh Vercel deploy of the upstream code also crashes before it returns an
+image, so GitHub shows a broken image.
+
+**Patch by [VMBR0](https://github.com/vmbr0).** Trophy art, rank rules, themes,
+and the MIT license stay the work of [ryo-ma](https://github.com/ryo-ma). This
+fork only changes what was required to make the card render again, and it adds a
+no-server way to publish the SVG.
+
+## Credits
+
+| Role                | Who                                                                                                         |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Patch               | [VMBR0](https://github.com/vmbr0)                                                                           |
+| Original author     | [ryo-ma](https://github.com/ryo-ma)                                                                         |
+| Original repository | [ryo-ma/github-profile-trophy](https://github.com/ryo-ma/github-profile-trophy)                             |
+| License             | MIT, copyright (c) 2020 ryo-ma. See [LICENSE](./LICENSE).                                                   |
+| Upstream sponsors   | Listed at the bottom. Sponsor [ryo-ma](https://github.com/sponsors/ryo-ma) to support the original service. |
+
+## What the patch changes
+
+- **Vercel boots.** Upstream imports `@std/dotenv/load`. `vercel-deno` does not
+  ship `deno.json`, so that alias throws `ERR_MODULE_NOT_FOUND` and every
+  request returns 500. This fork loads dotenv from a full `deno.land` URL.
+- **Errors are images.** A failed GitHub API call used to return an HTML page.
+  GitHub's image proxy cannot display HTML, so the README showed a broken image.
+  Failures now return an SVG error card. The page without `username` is still
+  the HTML form.
+- **`trophy.svg` can be written in the current directory.** The generator used
+  to treat the filename as a folder and then fail the write.
+- **No server required.** `trophy.svg` in this repo, refreshed by the **Update
+  trophy image** workflow, can be embedded through jsDelivr.
+
+## Setup
+
+Pick one. The query parameters and themes further down apply to a self-hosted or
+upstream URL. The static file is a ready-made card for this repo's owner.
+
+- [Static image, no server](#free-image-no-server)
+- [Self-host on Vercel](#self-hosting-on-vercel)
+- [Generate an SVG locally](#generate-an-svg-file-localy)
+- [Generate an SVG in GitHub Actions](#generate-an-svg-inside-github-ci-workflow)
+- [Ranks, themes, and query parameters](#optional-request-parameters)
+
 <p align="center">
-  You can use this service for free. I'm looking for sponsors to help us keep up with this service❤️
+  You can use the original service for free. The upstream owner is looking for sponsors to keep that service up ❤️
 </p>
 <div align="center">
   <a href="https://github.com/sponsors/ryo-ma">
-    <img src="https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=ff69b4" alt="Sponsor"/>
+    <img src="https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=ff69b4" alt="Sponsor ryo-ma"/>
   </a>
 </div>
 
-> ⚠️ **Notice from the Project Owner**
+> ⚠️ **Notice from the original project owner**
 >
 > Hello everyone,\
 > I am the owner of this project.
@@ -613,27 +668,36 @@ Usage:
 
 ```yaml
 - name: Generate trophy
-  uses: Erik-Donath/github-profile-trophy@feature/generate-svg
+  uses: vmbr0/github-profile-trophy@master
   with:
     username: your-username
     output_path: trophy.svg
     token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+This repository also ships `.github/workflows/update-trophy.yml`, which runs
+that action for the repository owner and commits `trophy.svg`.
+
 ## Free image, no server
 
 `trophy.svg` at the root of this repo is already rendered for the repository
-owner. GitHub's image proxy will not display an SVG from
-`raw.githubusercontent.com`, so the profile README has to load it through
-jsDelivr:
+owner (`vmbr0`). Put this in a profile README:
 
 ```md
 [![trophy](https://cdn.jsdelivr.net/gh/vmbr0/github-profile-trophy@master/trophy.svg)](https://github.com/vmbr0/github-profile-trophy)
 ```
 
-The workflow **Update trophy image** rewrites that file every day. On a fork,
-open the Actions tab once and enable workflows, otherwise the schedule stays
-off. You can also run it by hand with "Run workflow".
+jsDelivr is used because a `raw.githubusercontent.com` SVG often shows up as a
+broken image on GitHub. The **Update trophy image** workflow rewrites the file
+every day. On a fork, open the Actions tab once and enable workflows, otherwise
+the schedule stays off. You can also run it by hand with **Run workflow**.
+
+Until this branch is merged, the file that is already generated is served from
+its commit:
+
+```md
+[![trophy](https://cdn.jsdelivr.net/gh/vmbr0/github-profile-trophy@1b665275773dab4f87a8e0e3ab3ea10e25ba1363/trophy.svg)](https://github.com/vmbr0/github-profile-trophy)
+```
 
 ## Self-hosting on Vercel
 
@@ -675,13 +739,14 @@ Check [CONTRIBUTING.md](./CONTRIBUTING.md) for more details.
 
 # License
 
-This product is licensed under the
-[MIT License](https://github.com/ryo-ma/github-profile-trophy/blob/master/LICENSE).
+MIT. Copyright (c) 2020 [ryo-ma](https://github.com/ryo-ma). The patch in this
+fork is by [VMBR0](https://github.com/vmbr0). See [LICENSE](./LICENSE).
 
 # 🙏 Sponsors
 
-Thank you so much to all the amazing sponsors who support this project! Your
-contributions help keep development going and make this work possible.
+Thank you to everyone who sponsors the original project by
+[ryo-ma](https://github.com/ryo-ma). Those contributions keep upstream
+development going.
 
 ## 💖 Monthly Sponsors
 
