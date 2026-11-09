@@ -100,7 +100,7 @@ needed when private contributions should count.
 
 ```yaml
 - name: Generate trophy
-  uses: vmbr0/github-profile-trophy@v1.0.0
+  uses: vmbr0/github-profile-trophy-renewed@v1.1.0
   with:
     username: your-username
     output_path: trophy.svg

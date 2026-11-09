@@ -1,5 +1,8 @@
-name: Generate GitHub Profile Trophy Renewed SVG
-description: Run the local generator script to produce an SVG.
+name: GitHub Profile Trophy Renewed
+description: Render rank trophies for a GitHub profile README as an SVG.
+branding:
+  icon: award
+  color: yellow
 inputs:
   username:
     description: "GitHub username to generate the trophy for"
